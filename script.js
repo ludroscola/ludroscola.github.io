@@ -37,7 +37,20 @@ async function loadTranslations(lang) {
     const elements = document.querySelectorAll('[data-i18n]');
     elements.forEach(element => {
       const key = element.getAttribute('data-i18n');
-      element.textContent = translate(key);
+        if (element.childNodes.length > 0) {
+            // If it has children, iterate through them and translate text nodes
+            element.childNodes.forEach(node => {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    node.textContent = translate(key);
+                } else if (node.hasAttribute && node.hasAttribute('data-i18n')) {
+                    // If a child element also has the data-i18n attribute, translate its text
+                    node.textContent = translate(node.getAttribute('data-i18n'));
+                }
+            });
+        } else {
+            // If it has no children (only text), directly translate the textContent
+            element.textContent = translate(key);
+        }
     });
 
     // Update language buttons
@@ -91,7 +104,7 @@ function checkEntryCode() {
     const hashedItalyCode = 2112504483;
     const hashedTurkiyeCode = -200744386;
     const hashedInputCode = hashCode(sanitizedCode);
-    console.log(sanitizedCode + '=' + hashedInputCode);
+    // console.log(sanitizedCode + '=' + hashedInputCode);
 
     if (hashedInputCode === hashedItalyCode) {
         showEventDetails('italyEvent');
