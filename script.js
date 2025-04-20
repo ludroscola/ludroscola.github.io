@@ -101,10 +101,10 @@ function checkEntryCode() {
     const sanitizedCode = sanitizeInput(inputCode);
 
     // Check if code is valid
-    const hashedItalyCode = 2112504483;
-    const hashedTurkiyeCode = -200744386;
+    const hashedItalyCode = -1272046950;
+    const hashedTurkiyeCode = 103145374;
     const hashedInputCode = hashCode(sanitizedCode);
-    // console.log(sanitizedCode + '=' + hashedInputCode);
+    //console.log(sanitizedCode + '=' + hashedInputCode);
 
     if (hashedInputCode === hashedItalyCode) {
         showEventDetails('italyEvent');
@@ -149,6 +149,24 @@ function sanitizeInput(input) {
     // Further escape special characters
     return sanitized.replace(/[^\w\s]/gi, '');
 }
+
+function hideEmptyBoxItems() {
+    const boxItems = document.querySelectorAll('.box .box-item');
+  
+    boxItems.forEach(item => {
+      const boxLeft = item.querySelector('.box-left');
+      const boxDescription = item.querySelector('.box-description');
+  
+      if (boxLeft && boxDescription) {
+        const leftText = boxLeft.textContent.trim();
+        const descriptionText = boxDescription.textContent.trim();
+  
+        if (!leftText || !descriptionText) {
+          item.style.display = 'none'; // Or item.remove() to completely remove from the DOM
+        }
+      }
+    });
+  }
 
 // Show toast message
 function showToast(message) {
