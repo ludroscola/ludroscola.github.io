@@ -43,40 +43,70 @@ body {
     padding: 20px;
 }
 
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f7f6; /* Light gray background */
+            color: #333; /* Darker text color */
+            text-align: center;
+            flex-direction: column; /* To stack the content vertically */
+        }
 
-.back-button {
-    display: inline-block;
-    margin-top: 30px;
-    padding: 12px 25px;
-    background: #e0c9a6;
-    color: #333;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    text-decoration: none;
-}
+        .container {
+            background-color: #ffffff; /* White background for the content box */
+            padding: 40px 60px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
+            max-width: 500px;
+            width: 90%;
+            box-sizing: border-box; /* Include padding in the element's total width and height */
+        }
 
-    .back-button:hover {
-        background: #d4b78e;
-    }
+        p {
+            font-size: 1.5em; /* Larger font size for the text */
+            margin: 15px 0; /* Space between paragraphs */
+            line-height: 1.6;
+            color: #555; /* Slightly lighter text color for details */
+        }
 
-@media (max-width: 768px) {
-    .entry-screen h1 {
-        font-size: 2.5rem;
-    }
+        p:first-of-type {
+            font-weight: 700; /* Bold the first line (IBAN) */
+            color: #333;
+        }
 
-    .box-item {
-        flex-direction: column;
-    }
+        p:last-of-type {
+            margin-top: 30px; /* More space above the thank you messages */
+            font-size: 1.8em; /* Even larger for thank you messages */
+            color: #007bff; /* A nice blue for thank you messages */
+            font-weight: 700;
+        }
 
-    .box-left {
-        width: 100%;
-        margin-bottom: 5px;
-    }
-}
+        /* Style for the link to remove default underline and color */
+        a {
+            text-decoration: none;
+            color: inherit; /* Inherit color from parent */
+        }
+
+        a:hover {
+            text-decoration: underline; /* Add underline on hover for better UX */
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 40px;
+            }
+            p {
+                font-size: 1.2em;
+            }
+            p:last-of-type {
+                font-size: 1.5em;
+            }
+        }
+
 
 footer {
     color: white; /* Darker text color */
