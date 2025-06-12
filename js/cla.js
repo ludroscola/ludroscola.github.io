@@ -1,13 +1,42 @@
 // Photo data with different orientations and captions
 const photos = [
-    { id: 1, orientation: 'landscape', imagePath: '/res/1.png' },
-    { id: 2, orientation: 'portrait', imagePath: '/res/2.png' },
-    { id: 3, orientation: 'landscape', imagePath: '/res/3.png' },
-    { id: 4, orientation: 'portrait', imagePath: '/res/4.png' },
-    { id: 1, orientation: 'portrait', imagePath: '/res/4.png' },
-    { id: 2, orientation: 'portrait', imagePath: '/res/2.png' },
-    { id: 3, orientation: 'landscape', imagePath: '/res/3.png' },
-    { id: 4, orientation: 'landscape', imagePath: '/res/1.png' },
+    { id: 1, orientation: 'portrait'},
+    { id: 2, orientation: 'landscape'},
+    { id: 3, orientation: 'landscape'},
+    { id: 4, orientation: 'landscape'},
+    { id: 5, orientation: 'landscape'},
+    { id: 6, orientation: 'landscape'},
+    { id: 7, orientation: 'landscape'},
+    { id: 8, orientation: 'landscape'},
+    { id: 9, orientation: 'landscape'},
+    { id: 10, orientation: 'landscape'},
+    { id: 11, orientation: 'portrait'},
+    { id: 12, orientation: 'landscape'},
+    { id: 13, orientation: 'portrait'},
+    { id: 14, orientation: 'landscape'},
+    { id: 15, orientation: 'landscape'},
+    { id: 16, orientation: 'landscape'},
+    { id: 17, orientation: 'landscape'},
+    { id: 18, orientation: 'portrait'},
+    { id: 19, orientation: 'landscape'},
+    { id: 20, orientation: 'portrait'},
+    { id: 21, orientation: 'portrait'},
+    { id: 22, orientation: 'landscape'},
+    { id: 23, orientation: 'landscape'},
+    { id: 24, orientation: 'portrait'},
+    { id: 25, orientation: 'landscape'},
+    { id: 26, orientation: 'landscape'},
+    { id: 27, orientation: 'portrait'},
+    { id: 28, orientation: 'landscape'},
+    { id: 29, orientation: 'landscape'},
+    { id: 30, orientation: 'landscape'},
+    { id: 31, orientation: 'landscape'},
+    { id: 32, orientation: 'landscape'},
+    { id: 33, orientation: 'portrait'},
+    { id: 34, orientation: 'portrait'},
+    { id: 35, orientation: 'portrait'},
+    { id: 36, orientation: 'portrait'},
+    { id: 37, orientation: 'landscape'},
 ];
 
 let currentPhotoId = null;
@@ -22,8 +51,8 @@ function generatePhotoCards() {
         card.onclick = () => openFullscreen(photo.id);
 
         card.innerHTML = `
-                    <div class="photo-placeholder" style="background-image: url('${photo.imagePath}'); background-size: cover; background-position: center;">
-                        <img src="${photo.imagePath}" style="width: 110%; height: 110%; object-fit: cover;">
+                    <div class="photo-placeholder">
+                        <img src="/res/${photo.id}.png" style="width: 110%; height: 110%; object-fit: cover;">
                     </div>
                 `;
 
