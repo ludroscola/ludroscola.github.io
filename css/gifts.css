@@ -94,7 +94,7 @@ body {
 }
 
 .event-header {
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 }
 
     .event-header h1 {
@@ -173,6 +173,20 @@ body {
             text-decoration: underline;
         }
 
+@media (max-width: 768px) {
+    .entry-screen h1 {
+        font-size: 2.5rem;
+    }
+
+    .box-item {
+        flex-direction: column;
+    }
+
+    .box-left {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
 
 footer {
     color: white;
