@@ -52,7 +52,7 @@ function generatePhotoCards() {
 
         card.innerHTML = `
                     <div class="photo-placeholder">
-                        <img src="/res/${photo.id}.png" style="width: 110%; height: 110%; object-fit: cover;">
+                        <img src="/res/${photo.id}.png" style="width: 92%; height: 92%; object-fit: cover;">
                     </div>
                 `;
 
