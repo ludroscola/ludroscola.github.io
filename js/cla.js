@@ -1,0 +1,242 @@
+// Photo data with different orientations and captions
+const photos = [
+    { id: 1, orientation: 'landscape', imagePath: '/res/1.png' },
+    { id: 2, orientation: 'portrait', imagePath: '/res/2.png' },
+    { id: 3, orientation: 'landscape', imagePath: '/res/3.png' },
+    { id: 4, orientation: 'portrait', imagePath: '/res/4.png' },
+    { id: 1, orientation: 'portrait', imagePath: '/res/4.png' },
+    { id: 2, orientation: 'portrait', imagePath: '/res/2.png' },
+    { id: 3, orientation: 'landscape', imagePath: '/res/3.png' },
+    { id: 4, orientation: 'landscape', imagePath: '/res/1.png' },
+];
+
+let currentPhotoId = null;
+
+// Generate photo cards
+function generatePhotoCards() {
+    const photoGrid = document.getElementById('photoGrid');
+
+    photos.forEach(photo => {
+        const card = document.createElement('div');
+        card.className = `photo-card ${photo.orientation}`;
+        card.onclick = () => openFullscreen(photo.id);
+
+        card.innerHTML = `
+                    <div class="photo-placeholder" style="background-image: url('${photo.imagePath}'); background-size: cover; background-position: center;">
+                        <img src="${photo.imagePath}" style="width: 110%; height: 110%; object-fit: cover;">
+                    </div>
+                `;
+
+        photoGrid.appendChild(card);
+    });
+}
+
+// Open fullscreen view with animation
+function openFullscreen(photoId) {
+    currentPhotoId = photoId;
+    const photo = photos.find(p => p.id === photoId);
+    const overlay = document.getElementById('fullscreenOverlay');
+    const fullscreenPhoto = document.getElementById('fullscreenPhoto');
+    const content = document.getElementById('fullscreenContent');
+    const carouselContainer = document.getElementById('carouselContainer');
+
+    // Set photo orientation class
+    fullscreenPhoto.className = `fullscreen-photo ${photo.orientation}`;
+
+    // Update content
+    content.style.backgroundImage = `url('${photo.imagePath}')`;
+    content.style.backgroundSize = 'cover';
+    content.style.backgroundPosition = 'center';
+    content.innerHTML = `<img src="${photo.imagePath}" alt="${photo.caption}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" 
+                                 onerror="this.style.display='none'; this.parentElement.innerHTML='<span>Photo ${photo.id}</span>'; this.parentElement.style.background='linear-gradient(45deg, #ff6b6b, #4ecdc4)';">`;
+
+    // Show overlay and blur background
+    overlay.classList.add('active');
+    carouselContainer.classList.add('blurred');
+
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+}
+
+// Close fullscreen view with reverse animation
+function closeFullscreen() {
+    const overlay = document.getElementById('fullscreenOverlay');
+    const carouselContainer = document.getElementById('carouselContainer');
+
+    // Hide overlay and remove blur
+    overlay.classList.remove('active');
+    carouselContainer.classList.remove('blurred');
+
+    // Restore body scroll
+    document.body.style.overflow = 'auto';
+
+    currentPhotoId = null;
+}
+
+// Download photo function
+function downloadPhoto() {
+    if (!currentPhotoId) return;
+
+    const photo = photos.find(p => p.id === currentPhotoId);
+
+    // Create a temporary image to check if the file exists
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+
+    img.onload = function () {
+        // Create a canvas to generate the image
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas dimensions based on orientation
+        if (photo.orientation === 'portrait') {
+            canvas.width = 600;
+            canvas.height = 800;
+        } else {
+            canvas.width = 800;
+            canvas.height = 600;
+        }
+
+        // Draw the image on canvas
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        // Create download link
+        canvas.toBlob(blob => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `gizem-davide-wedding-photo-${photo.id}.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showSuccessMessage('Photo downloaded successfully!');
+        });
+    };
+
+    img.onerror = function () {
+        // Fallback: create a placeholder image
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        if (photo.orientation === 'portrait') {
+            canvas.width = 600;
+            canvas.height = 800;
+        } else {
+            canvas.width = 800;
+            canvas.height = 600;
+        }
+
+        // Create gradient fallback
+        const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        gradient.addColorStop(0, '#ff6b6b');
+        gradient.addColorStop(1, '#4ecdc4');
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Add text
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 48px Arial';
+        ctx.textAlign = 'center';
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+        ctx.shadowBlur = 10;
+        ctx.fillText(`Photo ${photo.id}`, canvas.width / 2, canvas.height / 2);
+
+        canvas.toBlob(blob => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `gizem-davide-wedding-photo-${photo.id}.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showSuccessMessage('Photo downloaded successfully!');
+        });
+    };
+
+    img.src = photo.imagePath;
+}
+
+// Share photo function
+function sharePhoto() {
+    if (!currentPhotoId) return;
+
+    const photo = photos.find(p => p.id === currentPhotoId);
+
+    if (navigator.share) {
+        // Use native sharing if available
+        navigator.share({
+            title: `Gizem & Davide Wedding - ${photo.caption}`,
+            text: `Check out this beautiful wedding photo: ${photo.caption}`,
+            url: window.location.href
+        }).then(() => {
+            showSuccessMessage('Photo shared successfully!');
+        }).catch(err => {
+            fallbackShare(photo);
+        });
+    } else {
+        fallbackShare(photo);
+    }
+}
+
+// Fallback share function
+function fallbackShare(photo) {
+    const shareText = `Check out this beautiful wedding photo from Gizem & Davide's wedding: ${photo.caption}`;
+
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(shareText).then(() => {
+            showSuccessMessage('Share text copied to clipboard!');
+        });
+    } else {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = shareText;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showSuccessMessage('Share text copied to clipboard!');
+    }
+}
+
+// Show success message
+function showSuccessMessage(message) {
+    const successMessage = document.getElementById('successMessage');
+    successMessage.textContent = message;
+    successMessage.classList.add('show');
+
+    setTimeout(() => {
+        successMessage.classList.remove('show');
+    }, 3000);
+}
+
+// Close fullscreen when clicking outside the photo
+document.getElementById('fullscreenOverlay').addEventListener('click', function (e) {
+    if (e.target === this) {
+        closeFullscreen();
+    }
+});
+
+// Close fullscreen with Escape key
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && currentPhotoId) {
+        closeFullscreen();
+    }
+});
+
+// Initialize the photo gallery
+document.addEventListener('DOMContentLoaded', function () {
+    generatePhotoCards();
+});
+
+// Smooth scrolling for better user experience
+document.addEventListener('scroll', function () {
+    const scrolled = window.pageYOffset;
+    const parallax = document.querySelector('.header');
+    const speed = scrolled * 0.5;
+    parallax.style.transform = `translateY(${speed}px)`;
+});
