@@ -44,7 +44,6 @@ body {
     z-index: -1;
 }
 
-/* Carousel Container */
 .carousel-container {
     padding: 10px;
     max-width: 800px;
@@ -57,19 +56,18 @@ body {
         filter: blur(8px);
     }
 
-/* Photo Grid */
 .photo-grid {
     column-count: 2;
     column-gap: 5px;
 }
 
-/* Polaroid-style Photo Card */
 .photo-card {
     transition: all 0.3s ease;
     cursor: pointer;
     transform: rotate(0deg);
     break-inside: avoid-column;
     display: block;
+    position: relative;
 }
 
     .photo-card:nth-child(2n) {
@@ -101,12 +99,10 @@ body {
     overflow: hidden;
 }
 
-/* Portrait photos */
 .photo-card.portrait .photo-placeholder {
     aspect-ratio: var(--aspect-ratio-p);
 }
 
-/* Fullscreen Overlay */
 .fullscreen-overlay {
     position: fixed;
     top: 0;
@@ -119,37 +115,43 @@ body {
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: opacity 0.5s ease;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
     .fullscreen-overlay.active {
         display: flex;
         opacity: 1;
+        visibility: visible;
     }
 
 .fullscreen-photo {
-    z-index: 20;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    opacity: 0;
+    transition: opacity 10s ease;
 }
 
-.fullscreen-photo-content {
-    max-height: 80vh;
-    aspect-ratio: var(--aspect-ratio-l);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-}
+    .fullscreen-photo.active {
+        opacity: 1;
+    }
 
-.fullscreen-photo.portrait .fullscreen-photo-content {
-    aspect-ratio: var(--aspect-ratio-p);
-}
+    .fullscreen-photo-content {
+        max-height: 80vh;
+        aspect-ratio: var(--aspect-ratio-l);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
 
-/* Control Buttons */
+    .fullscreen-photo.portrait .fullscreen-photo-content {
+        aspect-ratio: var(--aspect-ratio-p);
+    }
+
 .photo-controls {
     display: flex;
     justify-content: center;
@@ -158,7 +160,6 @@ body {
 }
 
 .control-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
     padding: 0.8rem 1.5rem;
@@ -190,12 +191,10 @@ body {
         background: linear-gradient(135deg, #ec4cff 15%, #e78181 100%);
     }
 
-/* Icons */
 .icon {
     font-size: 1rem;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
 
     .photo-controls {

@@ -40,6 +40,27 @@ const photos = [
 ];
 
 let currentPhotoId = null;
+let originalScrollbarWidth = 0;
+
+function getScrollbarWidth() {
+    // Create a temporary div
+    const outer = document.createElement('div');
+    outer.style.visibility = 'hidden';
+    outer.style.overflow = 'scroll'; // Enable scrollbar
+    document.body.appendChild(outer);
+
+    // Create inner div
+    const inner = document.createElement('div');
+    outer.appendChild(inner);
+
+    // Calculate scrollbar width
+    const scrollbarWidth = (outer.offsetWidth - inner.offsetWidth);
+
+    // Remove temporary divs
+    outer.parentNode.removeChild(outer);
+
+    return scrollbarWidth;
+}
 
 // Generate photo cards
 function generatePhotoCards() {
@@ -80,19 +101,25 @@ function openFullscreen(photoId) {
     carouselContainer.classList.add('blurred');
 
     // Prevent body scroll
+    document.body.style.paddingRight = `${originalScrollbarWidth}px`;
     document.body.style.overflow = 'hidden';
+
+    fullscreenPhoto.classList.add('active');
 }
 
 // Close fullscreen view with reverse animation
 function closeFullscreen() {
     const overlay = document.getElementById('fullscreenOverlay');
     const carouselContainer = document.getElementById('carouselContainer');
+    const fullscreenPhoto = document.getElementById('fullscreenPhoto');
 
     // Hide overlay and remove blur
+    fullscreenPhoto.classList.remove('active');
     overlay.classList.remove('active');
     carouselContainer.classList.remove('blurred');
 
     // Restore body scroll
+    document.body.style.paddingRight = 0;
     document.body.style.overflow = 'auto';
 
     currentPhotoId = null;
@@ -228,17 +255,6 @@ function fallbackShare(photo) {
     }
 }
 
-// Show success message
-function showSuccessMessage(message) {
-    const successMessage = document.getElementById('successMessage');
-    successMessage.textContent = message;
-    successMessage.classList.add('show');
-
-    setTimeout(() => {
-        successMessage.classList.remove('show');
-    }, 3000);
-}
-
 // Close fullscreen when clicking outside the photo
 document.getElementById('fullscreenOverlay').addEventListener('click', function (e) {
     if (e.target === this) {
@@ -256,12 +272,5 @@ document.addEventListener('keydown', function (e) {
 // Initialize the photo gallery
 document.addEventListener('DOMContentLoaded', function () {
     generatePhotoCards();
-});
-
-// Smooth scrolling for better user experience
-document.addEventListener('scroll', function () {
-    const scrolled = window.pageYOffset;
-    const parallax = document.querySelector('.header');
-    const speed = scrolled * 0.5;
-    parallax.style.transform = `translateY(${speed}px)`;
+    originalScrollbarWidth = getScrollbarWidth();
 });
