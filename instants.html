@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" , viewport-fit="cover">
+    <link rel="icon" type="image/png" href="/res/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/res/favicon.svg" />
+    <title>DaGi Wedding Memories</title>
+    <link rel="stylesheet" href="/css/cla.css">
+</head>
+<body>
+    <div class="background"></div>
+    <div class="overlay"></div>
+
+    <div class="carousel-container" id="carouselContainer">
+        <div class="photo-grid" id="photoGrid">
+            <!-- Photo content will be inserted here -->
+        </div>
+    </div>
+
+
+    <div class="fullscreen-overlay" id="fullscreenOverlay">
+        <div class="fullscreen-photo" id="fullscreenPhoto">
+            <div class="fullscreen-photo-content" id="fullscreenContent">
+                <!-- Photo content will be inserted here -->
+            </div>
+            <div class="photo-controls">
+                <button class="control-btn close" onclick="closeFullscreen()">
+                    <span class="icon">
+                        <img src="/res/close.svg" />
+                    </span>
+                    Close
+                </button>
+                <button class="control-btn download" onclick="downloadPhoto()">
+                    <span class="icon">
+                        <img src="/res/download.svg" />
+                    </span>
+                    Download
+                </button>
+                <button class="control-btn share" onclick="sharePhoto()">
+                    <span class="icon">
+                        <img src="/res/share.svg" />
+                    </span>
+                    Share
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/cla.js"></script>
+
+</body>
+</html>

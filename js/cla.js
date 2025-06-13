@@ -1,40 +1,40 @@
 // Photo data with different orientations and captions
 const photos = [
     { id: 1, orientation: 'portrait'},
-    { id: 2, orientation: 'landscape'},
     { id: 3, orientation: 'landscape'},
-    { id: 4, orientation: 'landscape'},
     { id: 5, orientation: 'landscape'},
-    { id: 6, orientation: 'landscape'},
     { id: 7, orientation: 'landscape'},
-    { id: 8, orientation: 'landscape'},
     { id: 9, orientation: 'landscape'},
-    { id: 10, orientation: 'landscape'},
     { id: 11, orientation: 'portrait'},
-    { id: 12, orientation: 'landscape'},
     { id: 13, orientation: 'portrait'},
-    { id: 14, orientation: 'landscape'},
     { id: 15, orientation: 'landscape'},
-    { id: 16, orientation: 'landscape'},
     { id: 17, orientation: 'landscape'},
-    { id: 18, orientation: 'portrait'},
     { id: 19, orientation: 'landscape'},
-    { id: 20, orientation: 'portrait'},
     { id: 21, orientation: 'portrait'},
-    { id: 22, orientation: 'landscape'},
     { id: 23, orientation: 'landscape'},
-    { id: 24, orientation: 'portrait'},
     { id: 25, orientation: 'landscape'},
-    { id: 26, orientation: 'landscape'},
     { id: 27, orientation: 'portrait'},
-    { id: 28, orientation: 'landscape'},
     { id: 29, orientation: 'landscape'},
-    { id: 30, orientation: 'landscape'},
     { id: 31, orientation: 'landscape'},
-    { id: 32, orientation: 'landscape'},
     { id: 33, orientation: 'portrait'},
-    { id: 34, orientation: 'portrait'},
     { id: 35, orientation: 'portrait'},
+    { id: 2, orientation: 'landscape'},
+    { id: 4, orientation: 'landscape'},
+    { id: 6, orientation: 'landscape'},
+    { id: 8, orientation: 'landscape'},
+    { id: 10, orientation: 'landscape'},
+    { id: 12, orientation: 'landscape'},
+    { id: 14, orientation: 'landscape'},
+    { id: 16, orientation: 'landscape'},
+    { id: 18, orientation: 'portrait'},
+    { id: 20, orientation: 'portrait'},
+    { id: 22, orientation: 'landscape'},
+    { id: 24, orientation: 'portrait'},
+    { id: 26, orientation: 'landscape'},
+    { id: 28, orientation: 'landscape'},
+    { id: 30, orientation: 'landscape'},
+    { id: 32, orientation: 'landscape'},
+    { id: 34, orientation: 'portrait'},
     { id: 36, orientation: 'portrait'},
     { id: 37, orientation: 'landscape'},
 ];
@@ -52,7 +52,7 @@ function generatePhotoCards() {
 
         card.innerHTML = `
                     <div class="photo-placeholder">
-                        <img src="/res/${photo.id}.png" style="width: 92%; height: 92%; object-fit: cover;">
+                        <img src="/res/${photo.id}.png" style="width: 92%; height: 92%; object-fit: cover;" loading="lazy">
                     </div>
                 `;
 
@@ -73,11 +73,7 @@ function openFullscreen(photoId) {
     fullscreenPhoto.className = `fullscreen-photo ${photo.orientation}`;
 
     // Update content
-    content.style.backgroundImage = `url('${photo.imagePath}')`;
-    content.style.backgroundSize = 'cover';
-    content.style.backgroundPosition = 'center';
-    content.innerHTML = `<img src="${photo.imagePath}" alt="${photo.caption}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" 
-                                 onerror="this.style.display='none'; this.parentElement.innerHTML='<span>Photo ${photo.id}</span>'; this.parentElement.style.background='linear-gradient(45deg, #ff6b6b, #4ecdc4)';">`;
+    content.innerHTML = `<img src="/res/${photo.id}.png" style="width: 100%; height: auto; object-fit: cover; padding: 0px 10px;">`;
 
     // Show overlay and blur background
     overlay.classList.add('active');
@@ -119,11 +115,11 @@ function downloadPhoto() {
 
         // Set canvas dimensions based on orientation
         if (photo.orientation === 'portrait') {
-            canvas.width = 600;
-            canvas.height = 800;
+            canvas.width = 580;
+            canvas.height = 910;
         } else {
-            canvas.width = 800;
-            canvas.height = 600;
+            canvas.width = 910;
+            canvas.height = 580;
         }
 
         // Draw the image on canvas
@@ -150,11 +146,11 @@ function downloadPhoto() {
         const ctx = canvas.getContext('2d');
 
         if (photo.orientation === 'portrait') {
-            canvas.width = 600;
-            canvas.height = 800;
+            canvas.width = 580;
+            canvas.height = 910;
         } else {
-            canvas.width = 800;
-            canvas.height = 600;
+            canvas.width = 910;
+            canvas.height = 580;
         }
 
         // Create gradient fallback

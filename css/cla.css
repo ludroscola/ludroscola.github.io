@@ -1,6 +1,6 @@
 :root {
-    --aspect-ratio-p: 10/16;
-    --aspect-ratio-l: 16/10;
+    --aspect-ratio-p: 58/91;
+    --aspect-ratio-l: 91/58;
 }
 
 * {
@@ -29,8 +29,18 @@ body {
     background-image: url('/res/background.jpeg');
     background-size: cover;
     background-position: center;
-    filter: blur(3px);
+    filter: blur(5px);
     transform: scale(1.1);
+    z-index: -1;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
     z-index: -1;
 }
 
@@ -40,17 +50,16 @@ body {
     max-width: 800px;
     width: 100%;
     margin: 0 auto;
-    transition: filter 0.5s ease, transform 0.5s ease;
+    transition: all 0.5s ease;
 }
 
     .carousel-container.blurred {
         filter: blur(8px);
-        transform: scale(0.95);
     }
 
 /* Photo Grid */
 .photo-grid {
-    column-count: 2; /* Start with 2 columns on smaller screens */
+    column-count: 2;
     column-gap: 5px;
 }
 
@@ -80,7 +89,7 @@ body {
     }
 
     .photo-card:hover {
-        transform: rotate(0deg) scale(1.02) translateY(-5px);
+        transform: rotate(0deg) scale(1.03);
     }
 
 .photo-placeholder {
@@ -92,15 +101,6 @@ body {
     overflow: hidden;
 }
 
-    .photo-placeholder::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-
 /* Portrait photos */
 .photo-card.portrait .photo-placeholder {
     aspect-ratio: var(--aspect-ratio-p);
@@ -111,10 +111,10 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.9);
-    z-index: 1000;
+    width: 100%;
+    min-height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10;
     display: none;
     align-items: center;
     justify-content: center;
@@ -128,44 +128,21 @@ body {
     }
 
 .fullscreen-photo {
-    max-width: 90vw;
-    max-height: 80vh;
-    background: white;
-    border-radius: 15px;
-    padding: 1.5rem;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    transform: scale(0.5);
-    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    position: relative;
-}
-
-.fullscreen-overlay.active .fullscreen-photo {
-    transform: scale(1);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .fullscreen-photo-content {
-    width: 100%;
+    max-height: 80vh;
     aspect-ratio: var(--aspect-ratio-l);
-    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    font-size: 2rem;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     position: relative;
     overflow: hidden;
-}
-
-    .fullscreen-photo-content::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
 }
 
 .fullscreen-photo.portrait .fullscreen-photo-content {
@@ -177,7 +154,6 @@ body {
     display: flex;
     justify-content: center;
     gap: 1rem;
-    margin-top: 1.5rem;
     flex-wrap: wrap;
 }
 
@@ -203,15 +179,15 @@ body {
     }
 
     .control-btn.close {
-        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+        background: linear-gradient(135deg, #ebce3f 0%, #ee5a52 70% )
     }
 
     .control-btn.download {
-        background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+        background: linear-gradient(135deg, #4ecdc4 0%, #4b6ae3 80%);
     }
 
     .control-btn.share {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        background: linear-gradient(135deg, #ec4cff 15%, #e78181 100%);
     }
 
 /* Icons */
@@ -222,12 +198,6 @@ body {
 /* Responsive Design */
 @media (max-width: 768px) {
 
-    .fullscreen-photo {
-        max-width: 95vw;
-        max-height: 85vh;
-        padding: 1rem;
-    }
-
     .photo-controls {
         gap: 0.5rem;
     }
@@ -237,41 +207,3 @@ body {
         font-size: 0.8rem;
     }
 }
-
-/* Loading Animation */
-@keyframes shimmer {
-    0% {
-        background-position: -200px 0;
-    }
-
-    100% {
-        background-position: calc(200px + 100%) 0;
-    }
-}
-
-.loading {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200px 100%;
-    animation: shimmer 1.5s infinite;
-}
-
-/* Success feedback */
-.success-message {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(76, 175, 80, 0.95);
-    color: white;
-    padding: 1rem 2rem;
-    border-radius: 10px;
-    font-weight: 600;
-    z-index: 1001;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-}
-
-    .success-message.show {
-        opacity: 1;
-    }
