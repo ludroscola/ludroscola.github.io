@@ -18,6 +18,7 @@ body {
     min-height: 100vh;
     display: flex;
     justify-content: center;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .background {
@@ -186,6 +187,10 @@ body {
 
 .icon {
     font-size: 1rem;
+}
+
+*:focus {
+    outline: none !important;
 }
 
 @media (max-width: 768px) {
