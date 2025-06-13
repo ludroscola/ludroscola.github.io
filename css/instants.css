@@ -111,16 +111,15 @@ body {
     min-height: 100vh;
     background: rgba(0, 0, 0, 0.5);
     z-index: 10;
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
     .fullscreen-overlay.active {
-        display: flex;
         opacity: 1;
         visibility: visible;
     }
@@ -130,13 +129,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    opacity: 0;
-    transition: opacity 10s ease;
 }
-
-    .fullscreen-photo.active {
-        opacity: 1;
-    }
 
     .fullscreen-photo-content {
         max-height: 80vh;

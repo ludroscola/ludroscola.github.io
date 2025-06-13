@@ -103,18 +103,14 @@ function openFullscreen(photoId) {
     // Prevent body scroll
     document.body.style.paddingRight = `${originalScrollbarWidth}px`;
     document.body.style.overflow = 'hidden';
-
-    fullscreenPhoto.classList.add('active');
 }
 
 // Close fullscreen view with reverse animation
 function closeFullscreen() {
     const overlay = document.getElementById('fullscreenOverlay');
     const carouselContainer = document.getElementById('carouselContainer');
-    const fullscreenPhoto = document.getElementById('fullscreenPhoto');
 
     // Hide overlay and remove blur
-    fullscreenPhoto.classList.remove('active');
     overlay.classList.remove('active');
     carouselContainer.classList.remove('blurred');
 
@@ -134,124 +130,51 @@ function downloadPhoto() {
     // Create a temporary image to check if the file exists
     const img = new Image();
     img.crossOrigin = 'anonymous';
+    img.src = `/res/${photo.id}.png`;
 
     img.onload = function () {
-        // Create a canvas to generate the image
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
 
-        // Set canvas dimensions based on orientation
-        if (photo.orientation === 'portrait') {
-            canvas.width = 580;
-            canvas.height = 910;
-        } else {
-            canvas.width = 910;
-            canvas.height = 580;
-        }
+        // Set canvas dimensions to actual loaded image dimensions to maintain quality
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
 
-        // Draw the image on canvas
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-        // Create download link
+        // Create download link from canvas content
         canvas.toBlob(blob => {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `gizem-davide-wedding-photo-${photo.id}.png`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            if (blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `DaGi-wedding-instant-photo-${photo.id}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url); // Clean up the object URL
 
-            showSuccessMessage('Photo downloaded successfully!');
-        });
+            } else {
+                console.error('Failed to create blob for download.');
+            }
+        }, 'image/png'); // Specify image format
     };
-
-    img.onerror = function () {
-        // Fallback: create a placeholder image
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-
-        if (photo.orientation === 'portrait') {
-            canvas.width = 580;
-            canvas.height = 910;
-        } else {
-            canvas.width = 910;
-            canvas.height = 580;
-        }
-
-        // Create gradient fallback
-        const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-        gradient.addColorStop(0, '#ff6b6b');
-        gradient.addColorStop(1, '#4ecdc4');
-
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Add text
-        ctx.fillStyle = 'white';
-        ctx.font = 'bold 48px Arial';
-        ctx.textAlign = 'center';
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
-        ctx.shadowBlur = 10;
-        ctx.fillText(`Photo ${photo.id}`, canvas.width / 2, canvas.height / 2);
-
-        canvas.toBlob(blob => {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `gizem-davide-wedding-photo-${photo.id}.png`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-
-            showSuccessMessage('Photo downloaded successfully!');
-        });
-    };
-
-    img.src = photo.imagePath;
 }
 
 // Share photo function
-function sharePhoto() {
+async function sharePhoto()  {
     if (!currentPhotoId) return;
 
     const photo = photos.find(p => p.id === currentPhotoId);
+    const response = await fetch(`/res/${photo.id}.png`);
+    const blob = await response.blob();
+    const file = new File([blob], `DaGi-wedding-instant-photo-${photo.id}.png`, { type: blob.type });
+    const shareData = {
+        files: [file]
+    };
 
     if (navigator.share) {
-        // Use native sharing if available
-        navigator.share({
-            title: `Gizem & Davide Wedding - ${photo.caption}`,
-            text: `Check out this beautiful wedding photo: ${photo.caption}`,
-            url: window.location.href
-        }).then(() => {
-            showSuccessMessage('Photo shared successfully!');
-        }).catch(err => {
-            fallbackShare(photo);
-        });
-    } else {
-        fallbackShare(photo);
-    }
-}
-
-// Fallback share function
-function fallbackShare(photo) {
-    const shareText = `Check out this beautiful wedding photo from Gizem & Davide's wedding: ${photo.caption}`;
-
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(shareText).then(() => {
-            showSuccessMessage('Share text copied to clipboard!');
-        });
-    } else {
-        // Fallback for older browsers
-        const textArea = document.createElement('textarea');
-        textArea.value = shareText;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        showSuccessMessage('Share text copied to clipboard!');
+        await navigator.share(shareData);
     }
 }
 
