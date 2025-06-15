@@ -17,6 +17,7 @@ body {
     position: relative;
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     -webkit-tap-highlight-color: transparent;
 }
@@ -203,4 +204,11 @@ body {
         padding: 0.6rem 1.2rem;
         font-size: 0.8rem;
     }
+}
+
+footer {
+    color: white; /* Darker text color */
+    padding: 1em; /* Add some padding around the content */
+    text-align: center; /* Center the text within the footer */
+    font-size: 0.8em; /* Make the text a bit smaller */
 }
